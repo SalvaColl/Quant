@@ -1,6 +1,5 @@
-pandas
-yfinance
-numpy
-matplotlib
-jupyter
-numpy
+pandas==2.3.3
+yfinance==0.2.66
+matplotlib==3.10.6
+jupyter==1.1.1
+numpy==2.3.3
