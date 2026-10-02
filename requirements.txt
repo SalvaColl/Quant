@@ -3,4 +3,7 @@ yfinance
 numpy
 matplotlib
 jupyter
-numpy
+itertools
+statsmodels.api
+statsmodels.tsa
+statsmodels.regression
