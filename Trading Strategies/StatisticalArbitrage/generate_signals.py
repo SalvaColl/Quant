@@ -6,7 +6,6 @@ from statsmodels.tsa.stattools import adfuller
 import itertools
 
 def kalman_filter(y, x):
-    """Calculates dynamic hedge ratio and intercept using a Kalman Filter."""
     state_mean = np.zeros(2)
     state_cov = np.ones((2, 2))
     
