@@ -17,12 +17,14 @@ int main() {
     mt19937_64 rng(rd()); 
     normal_distribution<double> norm_dist(0.0, 1.0);
     
+    // Pre-calculate Geometric Brownian Motion constants
+    // Baseline path with the return the stock should make given the risk-free interest rate
     double drift = (r - 0.5 * sigma * sigma) * T;
     double vol = sigma * sqrt(T);
     double discount_factor = exp(-r * T);
     
     double sum_call_payoffs = 0.0;
-    double sum_call_payoffs_squared = 0.0;
+    double sum_call_payoffs_squared = 0.0; // for variance
     double sum_put_payoffs = 0.0;
 
     int iterations = num_simulations / 2;
@@ -30,14 +32,17 @@ int main() {
     for(int i = 0; i < iterations; i++) {
         double Z = norm_dist(rng);
         
+        // Sim1 with Z
+        // Price moves with the baseline drift + random shocks * volatility
+        // exp is e^(x)
         double S_T1 = S0 * exp(drift + vol * Z);
         double call_payoff1 = max(0.0, S_T1 - K);
         double put_payoff1 = max(0.0, K - S_T1);
-        
+        // Sim2 opposite with -Z
         double S_T2 = S0 * exp(drift + vol * -Z);
         double call_payoff2 = max(0.0, S_T2 - K);
         double put_payoff2 = max(0.0, K - S_T2);
-
+        // Avg both
         double avg_call_payoff = (call_payoff1 + call_payoff2) / 2.0;
         double avg_put_payoff = (put_payoff1 + put_payoff2) / 2.0;
         
@@ -46,12 +51,13 @@ int main() {
         sum_put_payoffs += avg_put_payoff;
     }
     
+    // Expected fair value
     double expected_call = sum_call_payoffs / iterations;
     double expected_put = sum_put_payoffs / iterations;
-    
+    // Discount back to present value
     double call_price = discount_factor * expected_call;
     double put_price = discount_factor * expected_put;
-
+    // Std error
     double variance = (sum_call_payoffs_squared / iterations) - (expected_call * expected_call);
     double standard_error = discount_factor * sqrt(variance / iterations);
     

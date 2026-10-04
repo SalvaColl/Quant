@@ -26,24 +26,27 @@ int main() {
     double v2_T = vol2 * sqrt(T);
     double discount_factor = exp(-r * T);
     
+    // Cholesky Decomposition matrix to enforce correlation
     double chol21 = rho;
     double chol22 = sqrt(1.0 - rho * rho);
     
     double payoff_sum = 0.0;
     
     for(int i = 0; i < iterations; i++) {
+        // Generate two independent random stocks
         double Z1 = norm_dist(rng);
         double Z2 = norm_dist(rng);
-        
+        // Make them correlated
         double W1_pos = Z1;
         double W2_pos = chol21 * Z1 + chol22 * Z2;
-        
+        // Simulate prices
         double ST1_pos = S1 * exp(drift1 + v1_T * W1_pos);
         double ST2_pos = S2 * exp(drift2 + v2_T * W2_pos);
-        
+        // Avg for basket
         double basket_pos = (ST1_pos + ST2_pos) / 2.0;
         double payoff_pos = max(0.0, basket_pos - K);
         
+        // Second simulation (opposite)
         double W1_neg = -Z1;
         double W2_neg = chol21 * (-Z1) + chol22 * (-Z2);
         
@@ -53,9 +56,11 @@ int main() {
         double basket_neg = (ST1_neg + ST2_neg) / 2.0;
         double payoff_neg = max(0.0, basket_neg - K);
         
+        // Average results
         payoff_sum += (payoff_pos + payoff_neg) / 2.0;
     }
     
+    // Average everything and bring it back to present value
     double expected_payoff = payoff_sum / num_simulations;
     double basket_call_price = discount_factor * expected_payoff;
     
