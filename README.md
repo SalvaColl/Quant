@@ -6,6 +6,18 @@ This repository contains implementations of institutional-grade option pricing m
 - **Develop:** Build scalable, automated trading pipelines using Python for data analysis and C++ for low-latency execution.
 - **Backtest:** Evaluate strategies using institutional risk metrics (Sharpe Ratio, Max Drawdown, slippage modeling) rather than just raw profitability.
 
+## Market Making & Risk Management
+The `Options Pricing` directory includes engines for analyzing and hedging derivative risk.
+
+**Dynamic Delta Hedging Simulator (C++)**
+- **Black-Scholes Replication:** Proves the No-Arbitrage pricing theory by dynamically hedging a short option position with the underlying stock and a risk-free bank loan.
+- **Monte Carlo Paths:** Simulates 10,000 independent market lifetimes to analyze the distribution of hedging outcomes.
+- **Institutional Metrics:** Calculates Tracking Error (Standard Deviation of discrete daily hedging) and absolute Gamma Bleed. 
+
+**Finite Difference Greeks Engine (C++)**
+- **Risk Dimensions:** Calculates Delta ($\Delta$), Gamma ($\Gamma$), Vega ($\nu$), Theta ($\Theta$), and Rho ($\rho$).
+- **Computational Engineering:** Uses Central and Forward Finite Difference methods to measure sensitivity by simulating microscopic market bumps, avoiding complex closed-form calculus derivations.
+
 ## Options Pricing
 The `Options Pricing` directory features both discrete and continuous-time pricing engines:
 
@@ -54,6 +66,9 @@ pip install -r requirements.txt
 **3. C++ Execution (High-Performance Backtesting & Pricing):**
 For maximum performance on Monte Carlo simulations and multi-pair backtesting, compile the C++ engines with the `-O3` optimization flag:
 ```bash
-g++ -O3 backtester.cpp -o backtester.exe
-.\backtester.exe
+g++ -O3 greeks.cpp -o greeks.exe
+.\greeks.exe
+
+g++ -O3 delta_hedging.cpp -o delta_hedging.exe
+.\delta_hedging.exe
 ```
