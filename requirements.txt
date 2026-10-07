@@ -1,9 +1,4 @@
-pandas
-yfinance
-numpy
-matplotlib
-jupyter
-itertools
-statsmodels.api
-statsmodels.tsa
-statsmodels.regression
+numpy==2.5.3
+pandas==3.0.6
+statsmodels==0.15.0
+yfinance==0.2.65
